@@ -51,7 +51,10 @@ RSpec.describe DefaultRest do
         body: { msg: "error" }.to_json,
         status: 403
       )
-      expect { DefaultRest.post("/test") }.to raise_error(::RestClient::Exception)
+      expect(
+        DefaultRest.post("/test", {a:1},
+                         DefaultRest.default_options.merge(exception_with_response: false))[:response_code]
+      ).to eq 403
     end
   end
 end

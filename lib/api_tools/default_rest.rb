@@ -73,6 +73,7 @@ class DefaultRest
           raise ex if user_options[:exception_with_response]
           return {
             status: false,
+            response_code: ex.response.code,
             response_body: ex.response.body,
             message: ex.message
           }
@@ -81,7 +82,11 @@ class DefaultRest
           next
         end
       end
-      raise exception
+      raise exception unless user_options[:ensure_no_exception]
+      {
+        status: false,
+        message: ex.message
+      }
     end
 
     def default_options
@@ -90,6 +95,7 @@ class DefaultRest
         retry_times: 5,
         response_json: true,
         params_to_json: true,
+        ensure_no_exception: false,
         header: { content_type: :json, accept: :json },
         exception_with_response: true
       }
