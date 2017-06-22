@@ -1,27 +1,30 @@
 require_relative '../vendors/hash'
 require 'json'
 require 'uri'
+require 'rest-client'
+require 'oj'
 
 class DefaultRest
   class << self
     %w[get delete head].each do |word|
       define_method(word) do |path, params = {}, options = {}|
-        request_dict = build_similar_get_request(word, path, params, options)
-        basic_request(path, request_dict, user_options)
+        user_params = base_params.merge(params)
+        user_options = default_options.deep_merge(options) # 这里注意一下，是深merge，hash 底下的子hash是merge
+        request_dict = build_similar_get_request(word, path, user_params, user_options)
+        basic_request(request_dict, user_options)
       end
     end
 
     %w[post patch put].each do |word|
       define_method(word) do |path, params = {}, options = {}|
-        request_dict = build_similar_post_request(word, path, params, options)
-        basic_request(path, request_dict, user_options)
+        user_params = base_params.merge(params)
+        user_options = default_options.deep_merge(options) # 这里注意一下，是深merge，hash 底下的子hash是merge
+        request_dict = build_similar_post_request(word, path, user_params, user_options)
+        basic_request(request_dict, user_options)
       end
     end
 
-    def build_similar_get_request(word, path, params, options)
-      user_params = base_params.merge(params)
-      user_options = default_options.deep_merge(options) # 这里注意一下，是深merge，hash 底下的子hash是merge
-
+    def build_similar_get_request(word, path, user_params, user_options)
       # 生成类get 请求的URL
       path_params = URI.escape(user_params.collect { |k, v| "#{k}=#{v}" }.join('&'))
       tmp = path.include?('?') ? '&' : '?'
@@ -35,11 +38,9 @@ class DefaultRest
       }
     end
 
-    def build_similar_post_request(word, path, params, options)
-      user_params = add_those_to_params.merge(params)
-      user_options = default_options.deep_merge(options) # 这里注意一下，是深merge，hash 底下的子hash是merge
+    def build_similar_post_request(word, path, user_params, user_options)
       url = build_whole_url(path)
-      payload = default_options[:params_to_json] ? user_params.to_json : user_params
+      payload = user_options[:params_to_json] ? user_params.to_json : user_params
       {
         method: word,
         url: url,
