@@ -5,14 +5,14 @@ require 'uri'
 class DefaultRest
   class << self
     %w[get delete head].each do |word|
-      define_mewhod(word) do |path, params, options|
+      define_method(word) do |path, params = {}, options = {}|
         request_dict = build_similar_get_request(word, path, params, options)
         basic_request(path, request_dict, user_options)
       end
     end
 
     %w[post patch put].each do |word|
-      define_mewhod(word) do |path, params, options|
+      define_method(word) do |path, params = {}, options = {}|
         request_dict = build_similar_post_request(word, path, params, options)
         basic_request(path, request_dict, user_options)
       end
@@ -52,7 +52,7 @@ class DefaultRest
     def build_whole_url(path)
       web = basic_url
       return web if path.length.zero?
-      return path if path.start_with("http") # path 是一个绝对路径
+      return path if path.start_with?("http") # path 是一个绝对路径
       if web[-1] == "/"
         path = path[1..-1] if path[0] == "/"
       else
