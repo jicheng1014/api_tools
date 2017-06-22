@@ -19,7 +19,7 @@ RSpec.describe DefaultRest do
       dict = DefaultRest.build_similar_get_request("get", "path", {a: 1}, DefaultRest.default_options)
       expect(dict[:method]).to eq "get"
       expect(dict[:url]).to eq "http://www.example.com/path?a=1"
-      expect(dict[:headers][:content_type]).to eq "json"
+      expect(dict[:headers][:content_type]).to eq :json
     end
   end
 end
