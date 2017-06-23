@@ -35,7 +35,7 @@ class DefaultRest
         url: url,
         headers: user_options[:header],
         timeout: user_options[:timeout]
-      }
+      }.merge(user_options[:other_base_execute_option])
     end
 
     def build_similar_post_request(word, path, user_params, user_options)
@@ -47,7 +47,7 @@ class DefaultRest
         payload: payload,
         headers: user_options[:header],
         timeout: user_options[:timeout]
-      }
+      }.merge(user_options[:other_base_execute_option])
     end
 
     def build_whole_url(path)
@@ -64,6 +64,7 @@ class DefaultRest
 
     def basic_request(request_dict, user_options)
       exception = nil
+      
       user_options[:retry_times].times do
         begin
           response = ::RestClient::Request.execute(request_dict)
@@ -97,6 +98,7 @@ class DefaultRest
         params_to_json: true,
         ensure_no_exception: false,
         header: { content_type: :json, accept: :json },
+        other_base_execute_option: {},
         exception_with_response: true
       }
     end
@@ -109,4 +111,4 @@ class DefaultRest
       {} # 子类中复写
     end
   end
-  end
+end

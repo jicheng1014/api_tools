@@ -30,6 +30,12 @@ RSpec.describe DefaultRest do
       expect(JSON.parse(dict[:payload])["a"]).to eq 1
       expect(dict[:headers][:content_type]).to eq :json
     end
+
+    it "could add other_base_execute_option" do 
+      dict = DefaultRest.build_similar_post_request("post", "path", { a: 1 }, DefaultRest.default_options.merge(other_base_execute_option: {test: "test"}))
+      expect(dict[:test]).to eq "test"
+    end
+    
   end
 
   describe "request a web correctly" do
