@@ -32,5 +32,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "webmock"
 
   spec.add_dependency "oj", '> 2.0'
-  spec.add_dependency "rest-client", '> 2.0'
+  spec.add_dependency "rest-client", '> 1.0'
 end
