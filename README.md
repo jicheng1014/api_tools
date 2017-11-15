@@ -9,9 +9,13 @@
 ## 使用
 
 ### add to Gemfile
-gem 'api_tools', :git => 'git@github.com:jicheng1014/api_tools.git'
+gem 'api_tools', :git => 'https://github.com/jicheng1014/api_tools.git'
 
 ## 任意对象
+
+直接使用  DefaultRest.post(url, xxx)    
+
+
 
 ```ruby
 class XXXService < DefaultRest
