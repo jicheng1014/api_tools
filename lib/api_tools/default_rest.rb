@@ -64,20 +64,11 @@ class DefaultRest
 
     def basic_request(request_dict, user_options)
       exception = nil
-      
       user_options[:retry_times].times do
         begin
           response = ::RestClient::Request.execute(request_dict)
           return ::Oj.load(response.body, symbol_keys: true) if user_options[:response_json]
           return response.body
-        rescue ::RestClient::ExceptionWithResponse => ex
-          raise ex if user_options[:exception_with_response]
-          return {
-            status: false,
-            response_code: ex.response.code,
-            response_body: ex.response.body,
-            message: ex.message
-          }
         rescue RestClient::Exception => e
           exception = e
           next
@@ -86,7 +77,9 @@ class DefaultRest
       raise exception unless user_options[:ensure_no_exception]
       {
         status: false,
-        message: ex.message
+        message: ex.message,
+        response_code: ex&.response.code,
+        response_body: ex&.response.body
       }
     end
 
