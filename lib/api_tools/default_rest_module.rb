@@ -1,5 +1,5 @@
 module ApiTools
-  module DefaultRest
+  module DefaultRestModule
     %w[get delete head].each do |word|
       define_method(word) do |path, params = {}, options = {}|
         user_params = base_params.merge(params)
