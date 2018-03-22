@@ -72,8 +72,8 @@ module ApiTools
       {
         status: false,
         message: ex.message,
-        response_code: ex&.response.code,
-        response_body: ex&.response.body
+        response_code: ex && ex.response.code,
+        response_body: ex && ex.response.body
       }
     end
 
