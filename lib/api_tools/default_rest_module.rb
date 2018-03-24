@@ -64,16 +64,18 @@ module ApiTools
           return ::Oj.load(response.body, symbol_keys: true) if user_options[:response_json]
           return response.body
         rescue RestClient::Exception => e
+          
           exception = e
           next
         end
       end
+      puts "Restclient error, body = #{exception.response.body}" if exception.respond_to? :response
       raise exception unless user_options[:ensure_no_exception]
       {
         status: false,
-        message: ex.message,
-        response_code: ex && ex.response.code,
-        response_body: ex && ex.response.body
+        message: exception.message,
+        response_code: exception && exception.response.code,
+        response_body: exception && exception.response.body
       }
     end
 

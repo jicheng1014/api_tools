@@ -48,19 +48,23 @@ RSpec.describe DefaultRest do
     end
 
     it "raise an exception" do
-      stub_request(:post, "www.example.com/test").to_return(
-        body: { msg: "ok" }.to_json,
-        status: 200
-      )
-      expect(DefaultRest.post("/test")[:msg]).to eq "ok"
+      # stub_request(:post, "www.example.com/test").to_return(
+      #   body: { msg: "ok" }.to_json,
+      #   status: 200
+      # )
+      # expect(DefaultRest.post("/test")[:msg]).to eq "ok"
       stub_request(:post, "www.example.com/test").to_return(
         body: { msg: "error" }.to_json,
         status: 403
       )
       expect(
-        DefaultRest.post("/test", {a:1},
-                         DefaultRest.default_options.merge(exception_with_response: false))[:response_code]
+        DefaultRest.post("/test", {a: 1},
+                         DefaultRest.default_options.merge(ensure_no_exception: true))[:response_code]
       ).to eq 403
+
+      expect do 
+        DefaultRest.post("/test")
+      end.to raise_error(RestClient::Exception)
     end
   end
 end
