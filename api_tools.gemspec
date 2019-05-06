@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["atpking"]
   spec.email         = ["atpking@gmail.com"]
 
-  spec.summary       = '常用工具集合'
-  spec.description   = '常用工具都放这里了'
+  spec.summary       = 'rest 的常用请求'
+  spec.description   = '简单点'
   spec.homepage      = "http://jicheng1014.cnblogs.com"
   spec.license       = "MIT"
 
@@ -31,6 +31,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "webmock"
 
-  spec.add_dependency "oj", '> 2.0'
-  spec.add_dependency "rest-client", '> 1.0'
+  spec.add_dependency 'multi_json'
+  spec.add_dependency "rest-client", '~> 2.0'
 end

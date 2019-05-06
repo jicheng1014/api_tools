@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApiTools
   module DefaultRestModule
     %w[get delete head].each do |word|
@@ -47,11 +49,12 @@ module ApiTools
     def build_whole_url(path)
       web = basic_url
       return web if path.length.zero?
-      return path if path.start_with?("http") # path 是一个绝对路径
-      if web[-1] == "/"
-        path = path[1..-1] if path[0] == "/"
+      return path if path.start_with?('http') # path 是一个绝对路径
+
+      if web[-1] == '/'
+        path = path[1..-1] if path[0] == '/'
       else
-        path = "/#{path}" if path[0] != "/"
+        path = "/#{path}" if path[0] != '/'
       end
       web + path
     end
@@ -61,21 +64,22 @@ module ApiTools
       user_options[:retry_times].times do
         begin
           response = ::RestClient::Request.execute(request_dict)
-          return ::Oj.load(response.body, symbol_keys: true) if user_options[:response_json]
+          return MultiJson.load(response.body, symbolize_keys: true) if user_options[:response_json]
+
           return response.body
         rescue RestClient::Exception => e
-          
           exception = e
           next
         end
       end
       puts "Restclient error, body = #{exception.response.body}" if exception.respond_to? :response
       raise exception unless user_options[:ensure_no_exception]
+
       {
         status: false,
         message: exception.message,
-        response_code: exception && exception.response.code,
-        response_body: exception && exception.response.body
+        response_code: exception&.response&.code,
+        response_body: exception&.response&.body
       }
     end
 
@@ -100,5 +104,4 @@ module ApiTools
       {} # 子类中复写
     end
   end
-
 end

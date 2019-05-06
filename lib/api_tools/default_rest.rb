@@ -3,7 +3,7 @@ require_relative './default_rest_module.rb'
 require 'json'
 require 'uri'
 require 'rest-client'
-require 'oj'
+require 'multi_json'
 
 class DefaultRest
   extend ApiTools::DefaultRestModule
