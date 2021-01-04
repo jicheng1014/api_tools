@@ -22,7 +22,7 @@ module ApiTools
 
     def build_similar_get_request(word, path, user_params, user_options)
       # 生成类get 请求的URL
-      path_params = URI.escape(user_params.collect { |k, v| "#{k}=#{v}" }.join('&'))
+      path_params = URI.encode_www_form(user_params)
       tmp = path.include?('?') ? '&' : '?'
       path = path + tmp + path_params
       url = build_whole_url(path)
